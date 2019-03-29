@@ -9,7 +9,7 @@ url = 'http://www.familymart.com.cn/store/Search'
 
 result = [1, 2, 3, 4, 5, 6, 10, 11, 12, 13]
 
-result2 = {
+result2 = [
     '上海',
     '苏州',
     '深圳',
@@ -20,15 +20,16 @@ result2 = {
     '北京',
     '东莞',
     '嘉兴'
-}
-
+]
 
 def sss(result):
-    wbk = xlwt.Workbook()
-    sheet = wbk.add_sheet('全家便利店')
+    rb = xlrd.open_workbook('all.xls', formatting_info=True)
+    # make a copy of it
+    wb = xl_copy(rb)
+    sheet = wb.add_sheet('全家便利店')
     n = 0
     for i in result2:
-        sheet.write(n, 1, i)
+        sheet.write(n, 0, i)
         n += 1
     n = 0
     for i in result:
@@ -37,11 +38,11 @@ def sss(result):
         }
         html = requests.post(url, parms)
         info = json.loads(html.text)
-        print(len(info['mapmsg']))
-        sheet.write(n, 0, i)
+        # print(info)
+        sheet.write(n, 1, len(info['mapmsg']))
         n += 1
 
-    wbk.save('all.xls')
+    wb.save('all.xls')
 
 sss(result)
 
